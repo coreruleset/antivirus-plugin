@@ -11,19 +11,19 @@ end
 
 function main(filename_or_data)
 	pcall(require, "m")
-	local chunk_size = tonumber(m.getvar("tx.antivirus-plugin_clamav_chunk_size", "none"))
+	local chunk_size = tonumber(m.getvar("tx.antivirus-plugin_clamav_chunk_size_bytes", "none"))
 	local connect_type = m.getvar("tx.antivirus-plugin_clamav_connect_type")
 	if connect_type == "socket" then
 		module_name = "socket.unix"
 	elseif connect_type == "tcp" then
 		module_name = "socket"
 	else
-		m.log(2, string.format("ClamAV: invalid value '%s' for 'tx.antivirus-plugin_clamav_connect_type' in crs-setup.conf.", connect_type))
+		m.log(2, string.format("ClamAV: invalid value '%s' for 'tx.antivirus-plugin_clamav_connect_type' in antivirus-config-before.conf.", connect_type))
 		return nil
 	end
 	local ok, socket = pcall(require, module_name)
 	if not ok then
-		m.log(2, "ClamAV: lua-socket library not installed, please install it or disable 'tx.antivirus-plugin_enable' in crs-setup.conf.")
+		m.log(2, "ClamAV: lua-socket library not installed, please install it or disable 'tx.antivirus-plugin_enable' in antivirus-config-before.conf.")
 		return nil
 	end
 
@@ -38,8 +38,8 @@ function main(filename_or_data)
 	-- Empty data, nothing to scan.
 	if data_size == 0 then
 		return nil
-	elseif data_size > tonumber(m.getvar("tx.antivirus-plugin_clamav_max_file_size_bytes")) then
-		m.log(2, string.format("ClamAV: Scan aborted, data are too big (see 'tx.antivirus-plugin_clamav_max_file_size_bytes' in crs-setup.conf), data size: %s bytes", data_size))
+	elseif data_size > tonumber(m.getvar("tx.antivirus-plugin_max_data_size_bytes")) then
+		m.log(2, string.format("ClamAV: Scan aborted, data are too big (see 'tx.antivirus-plugin_max_data_size_bytes' in antivirus-config-before.conf), data size: %s bytes", data_size))
 		return nil
 	end
 
@@ -48,7 +48,7 @@ function main(filename_or_data)
 	elseif connect_type == "tcp" then
 		sck = socket.tcp()
 	end
-	sck:settimeout(tonumber(m.getvar("tx.antivirus-plugin_clamav_network_timeout_seconds", "none")))
+	sck:settimeout(tonumber(m.getvar("tx.antivirus-plugin_network_timeout_seconds", "none")))
 	-- Connecting using unix socket file.
 	if connect_type == "socket" then
 		status, error = sck:connect(m.getvar("tx.antivirus-plugin_clamav_socket_file"))
