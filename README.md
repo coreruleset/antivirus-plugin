@@ -116,7 +116,7 @@ Default value: 4096
 
 ## Testing
 
-After configuration, antivirus protectoin should be tested, for example, using:
+After configuration, antivirus protectoin should be tested, for example, using:  
 curl http://localhost --form "data=@eicar.com"
 
 Get eicar test file from https://www.eicar.org/.
