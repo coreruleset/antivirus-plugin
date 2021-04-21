@@ -9,7 +9,7 @@ The plugin is able to scan these parts of the request:
  * uploaded file
  * body (disabled by default, see below)
 
-Communication with antivirus software is performe using a bundled Lua script and
+Communication with antivirus software is performed using a bundled Lua script and
 has following characteristics:
 
  * no external programs or tools are executed (no forking etc.)
@@ -25,15 +25,15 @@ for other antivirus software as well.
 
 ## Prerequisities
 
- * CRS version 3.4 or newer (or see "preparation for older installations" below)
+ * CRS version 3.4 or newer (or see "Preparation for older installations" below)
  * ModSecurity compiled with Lua support
  * lua-socket library
- * ModSecurity 'SecTmpSaveUploadedFiles' directive is 'On' or
-   'SecUploadKeepFiles' directive is set to either 'RelevantOnly' or 'On'
+ * ModSecurity `SecTmpSaveUploadedFiles` directive is `On` or
+   `SecUploadKeepFiles` directive is set to either `RelevantOnly` or `On`
 
 ## Installation
 
-Copy all files from 'plugins' directory into the 'plugins' directory of your OWASP
+Copy all files from `plugins` directory into the `plugins` directory of your OWASP
 ModSecurity Core Rule Set (CRS) installation.
 
 
@@ -57,7 +57,7 @@ _Your exact config may look a bit different, namely the paths. The important par
 
 ## Configuration
 
-All settings can be done in file 'plugins/antivirus-config-before.conf'.
+All settings can be done in file `plugins/antivirus-config-before.conf`.
 
 ### Main configuration
 
@@ -113,35 +113,36 @@ Default value: socket
 #### tx.antivirus-plugin_clamav_socket_file
 
 You need to set full path to the unix socket file if
-'tx.antivirus-plugin_clamav_connect_type' is set to 'socket'.
+`tx.antivirus-plugin_clamav_connect_type` is set to `socket`.
 
 Default value: /var/run/clamav/clamd.ctl
 
 #### tx.antivirus-plugin_clamav_address
 
 You need to set IP address or hostname if
-'tx.antivirus-plugin_clamav_connect_type' is set to 'tcp'.
+`tx.antivirus-plugin_clamav_connect_type` is set to `tcp`.
 
 Default value: 127.0.0.1
 
 #### tx.antivirus-plugin_clamav_port
 
-You need to set port if 'tx.antivirus-plugin_clamav_connect_type' is set to
-'tcp'.
+You need to set port if `tx.antivirus-plugin_clamav_connect_type` is set to
+`tcp`.
 
 Default value: 3310
 
 #### tx.antivirus-plugin_clamav_chunk_size_bytes
 
 Data are not send all at once into ClamAV but are splitted into chunks. Using
-this setting, you can set the chunk size. Make sure that this setting does not
-exceed 'StreamMaxLength' as defined in ClamAV configuration file clamd.conf.
+this setting, you can set the chunk size, in bytes. Make sure that this setting
+does not exceed `StreamMaxLength` as defined in ClamAV configuration file
+`clamd.conf`.
 
 Default value: 4096
 
 ## Testing
 
-After configuration, antivirus protectoin should be tested, for example, using:  
+After configuration, antivirus protection should be tested, for example, using:  
 curl http://localhost --form "data=@eicar.com"
 
 Get eicar test file from [https://secure.eicar.org/eicar.com](https://secure.eicar.org/eicar.com).
