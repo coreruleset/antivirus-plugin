@@ -31,11 +31,16 @@ for other antivirus software as well.
  * ModSecurity `SecTmpSaveUploadedFiles` directive is `On` or
    `SecUploadKeepFiles` directive is set to either `RelevantOnly` or `On`
 
-## Installation
+## LuaSocket library installation
+
+LuaSocket library should be part of your linux distribution. Here is an example
+of installation on Debian linux:  
+`apt install lua-socket`
+
+## Plugin installation
 
 Copy all files from `plugins` directory into the `plugins` directory of your
 OWASP ModSecurity Core Rule Set (CRS) installation.
-
 
 ### Preparation for older installations
 
@@ -47,11 +52,13 @@ OWASP ModSecurity Core Rule Set (CRS) installation.
 
 ```
 <IfModule security2_module>
+
  Include modsecurity.d/owasp-modsecurity-crs/crs-setup.conf
 
- IncludeOptional modsecurity.d/owasp-modsecurity-crs/plugins/*-before.conf
+ Include modsecurity.d/owasp-modsecurity-crs/plugins/*-config.conf
+ Include modsecurity.d/owasp-modsecurity-crs/plugins/*-before.conf
  Include modsecurity.d/owasp-modsecurity-crs/rules/*.conf
- IncludeOptional modsecurity.d/owasp-modsecurity-crs/plugins/*-after.conf
+ Include modsecurity.d/owasp-modsecurity-crs/plugins/*-after.conf
 
 </IfModule>
 ```
@@ -62,20 +69,12 @@ after like above. Adjust the paths accordingly._
 
 ## Configuration
 
-All settings can be done in file `plugins/antivirus-config-before.conf`.
+All settings can be done in file `plugins/antivirus-config.conf` which
+must be created by copying or renamig file `plugins/antivirus-config.conf.example`:
+`cp plugins/antivirus-config.conf.example plugins/antivirus-config.conf`
 
 ### Main configuration
 
-#### tx.antivirus-plugin_enable
-
-This setting can be used to disable or enable the whole plugin.
-
-Values:
- * 0 - disable plugin
- * 1 - enable plugin
-
-Default value: 1
- 
 #### tx.antivirus-plugin_scan_request_body
 
 This setting can be used to disable or enable antivirus scanning of request
@@ -148,7 +147,11 @@ Default value: 4096
 ## Testing
 
 After configuration, antivirus protection should be tested, for example, using:  
-curl http://localhost --form "data=@eicar.com"
+`curl http://localhost --form "data=@eicar.com"`
+
+Using default CRS configuration, this request should end with status 403 with
+the following message in the log:
+`ModSecurity: Access denied with code 403 (phase 2). String match "{HEX}EICAR.TEST.3.UNOFFICIAL" at TX:antivirus-plugin_virus_name. [file "/path/plugins/antivirus-before.conf"] [line "11"] [id "9502110"] [msg "Virus {HEX}EICAR.TEST.3.UNOFFICIAL found in uploaded file eicar.com."] [data "Virus {HEX}EICAR.TEST.3.UNOFFICIAL found in uploaded file eicar.com."] [severity "CRITICAL"] [ver "antivirus-plugin/1.0.0"] [tag "capec/1000/262/441/442"] [hostname "localhost"] [uri "/"] [unique_id "Yefjb9gVcLh21zSVoqRv5wAAAFs"]`
 
 Get eicar test file from [https://secure.eicar.org/eicar.com](https://secure.eicar.org/eicar.com).
 
@@ -164,7 +167,7 @@ of virus signatures suitable for protection of web applications.
 
 ## License
 
-Copyright (c) 2021 OWASP ModSecurity Core Rule Set project. All rights reserved.
+Copyright (c) 2021-2022 OWASP ModSecurity Core Rule Set project. All rights reserved.
 
 The OWASP ModSecurity Core Rule Set and its official plugins are distributed
 under Apache Software License (ASL) version 2. Please see the enclosed LICENSE

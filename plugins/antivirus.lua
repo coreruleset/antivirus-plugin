@@ -17,12 +17,12 @@ function main(filename_or_data)
 	elseif connect_type == "tcp" then
 		module_name = "socket"
 	else
-		m.log(2, string.format("Antivirus Plugin ERROR: Invalid value '%s' for 'tx.antivirus-plugin_clamav_connect_type' in antivirus-config-before.conf.", connect_type))
+		m.log(2, string.format("Antivirus Plugin ERROR: Invalid value '%s' for 'tx.antivirus-plugin_clamav_connect_type' in antivirus-config.conf.", connect_type))
 		return nil
 	end
 	local ok, socket = pcall(require, module_name)
 	if not ok then
-		m.log(2, "Antivirus Plugin ERROR: LuaSocket library not installed, please install it or disable 'tx.antivirus-plugin_enable' in antivirus-config-before.conf.")
+		m.log(2, "Antivirus Plugin ERROR: LuaSocket library not installed, please install it or disable this plugin.")
 		return nil
 	end
 
@@ -40,7 +40,7 @@ function main(filename_or_data)
 	if data_size == 0 then
 		return nil
 	elseif data_size > tonumber(m.getvar("tx.antivirus-plugin_max_data_size_bytes")) then
-		m.log(2, string.format("Antivirus Plugin ERROR: Scan aborted, data are too big (see 'tx.antivirus-plugin_max_data_size_bytes' in antivirus-config-before.conf), data size: %s bytes.", data_size))
+		m.log(2, string.format("Antivirus Plugin ERROR: Scan aborted, data are too big (see 'tx.antivirus-plugin_max_data_size_bytes' in antivirus-config.conf), data size: %s bytes.", data_size))
 		return nil
 	end
 
