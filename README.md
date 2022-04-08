@@ -6,7 +6,7 @@ This is a plugin that brings antivirus support to CRS.
 
 The plugin is able to scan these parts of the request:
 
- * uploaded file
+ * uploaded file (enabled by default, see below)
  * body (disabled by default, see below)
 
 Communication with antivirus software is performed using a bundled Lua script
@@ -63,6 +63,17 @@ must be created by copying or renamig file `plugins/antivirus-config.conf.exampl
 `cp plugins/antivirus-config.conf.example plugins/antivirus-config.conf`
 
 ### Main configuration
+
+#### tx.antivirus-plugin_scan_uploaded_file
+
+This setting can be used to disable or enable antivirus scanning of uploaded
+files (FILES_TMPNAMES variable).
+
+Values:
+ * 0 - disable antivirus scanning of uploaded files
+ * 1 - enable antivirus scanning of uploaded files
+
+Default value: 1
 
 #### tx.antivirus-plugin_scan_request_body
 

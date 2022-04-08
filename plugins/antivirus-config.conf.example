@@ -14,6 +14,7 @@ SecAction \
   pass,\
   t:none,\
   ver:'antivirus-plugin/1.0.0',\
+  setvar:'tx.antivirus-plugin_scan_uploaded_file=1',\
   setvar:'tx.antivirus-plugin_scan_request_body=0',\
   setvar:'tx.antivirus-plugin_max_data_size_bytes=1048576',\
   setvar:'tx.antivirus-plugin_network_timeout_seconds=2',\

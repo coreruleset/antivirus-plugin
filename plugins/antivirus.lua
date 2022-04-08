@@ -26,14 +26,17 @@ function main(filename_or_data)
 		return nil
 	end
 
-	local file_handle = io.open(filename_or_data, "r")
-	if file_handle ~= nil then
+	local data_type = m.getvar("tx.antivirus-plugin_data_type")
+	if data_type == "file" then
+		file_handle = io.open(filename_or_data, "r")
+		if file_handle == nil then
+			m.log(2, string.format("Antivirus Plugin ERROR: Cannot open uploaded file '%s'.", filename_or_data))
+			return nil
+		end
 		data_size = file_handle:seek("end")
-		data_type = "file"
 		file_handle:seek("set", 0)
 	else
 		data_size = string.len(filename_or_data)
-		data_type = "request_body"
 		position_from = 1
 	end
 	-- Empty data, nothing to scan.
