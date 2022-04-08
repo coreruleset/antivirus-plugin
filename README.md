@@ -25,11 +25,24 @@ for other antivirus software as well.
 
 ## Prerequisities
 
- * CRS version 3.4 or newer (or see "Preparation for older installations" below)
  * ModSecurity compiled with Lua support
  * LuaSocket library
  * ModSecurity `SecTmpSaveUploadedFiles` directive is `On` or
    `SecUploadKeepFiles` directive is set to either `RelevantOnly` or `On`
+
+## How to determine whether you have Lua support in ModSecurity
+
+Most modern distro packages come with Lua support compiled in. If you are unsure, or if you get odd error messages (e.g. `EOL found`) chances are you are unlucky. To be really sure look for ModSecurity announce Lua support when launching your web server:
+
+```
+... ModSecurity for Apache/2.9.5 (http://www.modsecurity.org/) configured.
+... ModSecurity: APR compiled version="1.7.0"; loaded version="1.7.0"
+... ModSecurity: PCRE compiled version="8.39 "; loaded version="8.39 2016-06-14"
+... ModSecurity: LUA compiled version="Lua 5.3"
+...
+```
+
+If this line is missing, then you are probably stuck without Lua. Check out the documentation at [coreruleset.org](https://coreruleset.org/docs) to learn how to get Lua support for your installation.
 
 ## LuaSocket library installation
 
@@ -39,33 +52,9 @@ of installation on Debian linux:
 
 ## Plugin installation
 
-Copy all files from `plugins` directory into the `plugins` directory of your
-OWASP ModSecurity Core Rule Set (CRS) installation.
-
-### Preparation for older installations
-
- * Create a folder named `plugins` in your existing CRS installation. That
-   folder is meant to be on the same level as the `rules` folder. So there is
-   your `crs-setup.conf` file and next to it the two folders `rules` and
-   `plugins`.
- * Update your CRS rules include to follow this pattern:
-
-```
-<IfModule security2_module>
-
- Include modsecurity.d/owasp-modsecurity-crs/crs-setup.conf
-
- Include modsecurity.d/owasp-modsecurity-crs/plugins/*-config.conf
- Include modsecurity.d/owasp-modsecurity-crs/plugins/*-before.conf
- Include modsecurity.d/owasp-modsecurity-crs/rules/*.conf
- Include modsecurity.d/owasp-modsecurity-crs/plugins/*-after.conf
-
-</IfModule>
-```
-
-_Your exact config may look a bit different, namely the paths. The important
-part is to accompany the rules-include with two plugins-includes before and
-after like above. Adjust the paths accordingly._
+For full and up to date instructions for the different available plugin
+installation methods, refer to [How to Install a Plugin](https://coreruleset.org/docs/configuring/plugins/#how-to-install-a-plugin)
+in the official CRS documentation.
 
 ## Configuration
 
