@@ -58,9 +58,7 @@ in the official CRS documentation.
 
 ## Configuration
 
-All settings can be done in file `plugins/antivirus-config.conf` which
-must be created by copying or renamig file `plugins/antivirus-config.conf.example`:  
-`cp plugins/antivirus-config.conf.example plugins/antivirus-config.conf`
+All settings can be done in file `plugins/antivirus-config.conf`.
 
 ### Main configuration
 
