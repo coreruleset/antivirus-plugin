@@ -35,9 +35,16 @@ function main(filename_or_data)
 		end
 		data_size = file_handle:seek("end")
 		file_handle:seek("set", 0)
-	else
-		data_size = string.len(filename_or_data)
+	elseif data_type == "request_body" then
+		if filename_or_data == nil then
+			data_size = 0
+		else
+			data_size = string.len(filename_or_data)
+		end
 		position_from = 1
+	else
+		m.log(2, "Antivirus Plugin ERROR: Invalid value for 'tx.antivirus-plugin_data_type', probably a misconfiguration or version mismatch.")
+		return nil
 	end
 	-- Empty data, nothing to scan.
 	if data_size == 0 then
