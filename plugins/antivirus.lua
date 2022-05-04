@@ -107,7 +107,7 @@ function main(filename_or_data)
 		end
 	end
 
-	if file_handle ~= nil then
+	if data_type == "file" then
 		io.close(file_handle)
 	end
 
