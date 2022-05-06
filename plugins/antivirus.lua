@@ -137,18 +137,22 @@ function main(filename_or_data)
 			m.setvar("tx.antivirus-plugin_virus_name", virus_name)
 			if data_type == "file" then
 				local real_file_name = "<unknown>"
-				local files_tmpnames = m.getvars("FILES_TMPNAMES", "none")
-				for key, tmpfile in pairs(files_tmpnames) do
-					if filename_or_data == tmpfile["value"] then
-						local input_name = string.match(tmpfile["name"], "^FILES_TMPNAMES:(.+)$")
-						local files = m.getvars("FILES", "none")
-						for key2, file in pairs(files) do
-							if file["name"] == string.format("FILES:%s", input_name) then
-								real_file_name = file["value"]
-								break
+				local modsec_build = tonumber(m.getvar("MODSEC_BUILD", "none"))
+				-- Because of the bug in v3 version, this feature is supported only in v2.
+				if modsec_build < 30000000 then
+					local files_tmpnames = m.getvars("FILES_TMPNAMES", "none")
+					for key, tmpfile in pairs(files_tmpnames) do
+						if filename_or_data == tmpfile["value"] then
+							local input_name = string.match(tmpfile["name"], "^FILES_TMPNAMES:(.+)$")
+							local files = m.getvars("FILES", "none")
+							for key2, file in pairs(files) do
+								if file["name"] == string.format("FILES:%s", input_name) then
+									real_file_name = file["value"]
+									break
+								end
 							end
+							break
 						end
-						break
 					end
 				end
 				m.setvar("tx.antivirus-plugin_file_name", real_file_name)
