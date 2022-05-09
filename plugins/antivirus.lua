@@ -137,10 +137,9 @@ function main(filename_or_data)
 			m.setvar("tx.antivirus-plugin_virus_name", virus_name)
 			if data_type == "file" then
 				local real_file_name = "<unknown>"
-				--local modsec_build = tonumber(m.getvar("MODSEC_BUILD", "none"))
-				-- Because of the bug in v3 version, this feature is supported only in v2.
-				--if modsec_build < 30000000 then
-				if _VERSION == "Lua 5.1" then
+				-- Because ModSecurity v3 doesn't support FILES_TMPNAMES within Lua, file name detection feature is available only for v2.
+				local modsec_build = tonumber(m.getvar("tx.antivirus-plugin_engine_version", "none"))
+				if modsec_build == 2 then
 					local files_tmpnames = m.getvars("FILES_TMPNAMES", "none")
 					for key, tmpfile in pairs(files_tmpnames) do
 						if filename_or_data == tmpfile["value"] then
