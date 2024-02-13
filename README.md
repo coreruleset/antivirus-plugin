@@ -1,4 +1,4 @@
-# OWASP ModSecurity Core Rule Set - Antivirus Plugin
+# OWASP CRS - Antivirus Plugin
 
 ## Description
 
@@ -165,8 +165,8 @@ of virus signatures suitable for protection of web applications.
 
 ## License
 
-Copyright (c) 2021-2022 OWASP ModSecurity Core Rule Set project. All rights reserved.
+Copyright (c) 2021-2022 OWASP CRS project. All rights reserved.
 
-The OWASP ModSecurity Core Rule Set and its official plugins are distributed
+The OWASP CRS and its official plugins are distributed
 under Apache Software License (ASL) version 2. Please see the enclosed LICENSE
 file for full details.
