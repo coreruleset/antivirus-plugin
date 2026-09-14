@@ -1,0 +1,96 @@
+schema_version: 1
+
+plugin:
+  name: "antivirus-plugin"
+  description: "Antivirus scanning of uploaded files and request bodies for CRS."
+  long_description: |
+    Brings antivirus support to CRS by scanning uploaded files and, optionally,
+    request bodies for viruses using a bundled Lua script. Currently supports
+    ClamAV, reachable via a unix socket or TCP/IP. No external programs are
+    forked and antivirus software does not need extended permissions to access
+    scanned data. Requests carrying a detected virus are blocked immediately;
+    the plugin does not raise the anomaly score.
+  type: "official"
+  category: "protection"
+  status: "being-tested"
+  license: "Apache-2.0"
+  authors:
+    - name: "OWASP CRS Team"
+      url: "https://coreruleset.org"
+  repository: "https://github.com/coreruleset/antivirus-plugin"
+  keywords:
+    - "antivirus"
+    - "clamav"
+    - "malware"
+    - "virus"
+    - "file-upload"
+
+rule_id_range:
+  start: 9502000
+  end: 9502999
+
+compatibility:
+  crs_version: ">=4.0.0"
+  engines:
+    - "modsecurity2"
+    - "modsecurity3"
+
+configuration:
+  file: "plugins/antivirus-config.conf"
+  variables:
+    - name: "tx.antivirus-plugin_enabled"
+      type: "boolean"
+      default: 1
+      description: "Enable or disable the antivirus plugin (0 to disable)."
+
+    - name: "tx.antivirus-plugin_scan_uploaded_file"
+      type: "boolean"
+      default: 1
+      description: "Scan uploaded files (FILES_TMPNAMES) for viruses."
+
+    - name: "tx.antivirus-plugin_scan_request_body"
+      type: "boolean"
+      default: 0
+      description: "Scan request bodies (REQUEST_BODY) for viruses. May use significant system resources."
+
+    - name: "tx.antivirus-plugin_max_data_size_bytes"
+      type: "integer"
+      default: 1048576
+      description: "Maximum data size, in bytes, that will be scanned. Larger data is allowed through and an error is logged."
+
+    - name: "tx.antivirus-plugin_network_timeout_seconds"
+      type: "integer"
+      default: 2
+      description: "Timeout, in seconds, for the connection to the antivirus daemon. On timeout, the request is allowed and an error is logged."
+
+    - name: "tx.antivirus-plugin_clamav_connect_type"
+      type: "enum"
+      default: "socket"
+      description: "How to connect to ClamAV: via a unix socket file or TCP/IP."
+      allowed_values:
+        - "socket"
+        - "tcp"
+
+    - name: "tx.antivirus-plugin_clamav_socket_file"
+      type: "string"
+      default: "/var/run/clamav/clamd.ctl"
+      description: "Full path to the ClamAV unix socket file, used when clamav_connect_type is 'socket'."
+      example: "/var/run/clamav/clamd.ctl"
+
+    - name: "tx.antivirus-plugin_clamav_address"
+      type: "string"
+      default: "127.0.0.1"
+      description: "IP address or hostname of the ClamAV daemon, used when clamav_connect_type is 'tcp'."
+      example: "127.0.0.1"
+
+    - name: "tx.antivirus-plugin_clamav_port"
+      type: "integer"
+      default: 3310
+      description: "TCP port of the ClamAV daemon, used when clamav_connect_type is 'tcp'."
+      min: 1
+      max: 65535
+
+    - name: "tx.antivirus-plugin_clamav_chunk_size_bytes"
+      type: "integer"
+      default: 4096
+      description: "Chunk size, in bytes, used when streaming data to ClamAV. Must not exceed ClamAV's StreamMaxLength."
